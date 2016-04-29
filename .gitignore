@@ -1,0 +1,37 @@
+.classpath
+*classpath*
+.classpath
+git-daemon-export-ok
+.settings/
+target/
+build/
+WebContent/WEB-INF/lib
+git*
+.checkstyle
+.project
+.settings
+bin
+dependency-reduced-pom.xml
+*.sublime-*
+/scratch
+.gradle
+README.html
+*.class
+*.orig
+*.java.orig
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+.sonar
+sonar-projecy.properties
+serverstart.bat
+workflow.bat
