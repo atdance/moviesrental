@@ -7,6 +7,7 @@ import com.movies.api.error.ApiExceptionMapper;
 import com.movies.api.error.GlobalExceptionMapper;
 import com.movies.api.error.SystemExceptionMapper;
 import com.movies.api.resource.RentalResource;
+import com.movies.model.schema.RentalsDAO;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -28,16 +29,15 @@ public class MoviesDropwizardApp extends Application<MoviesCatalogConfig> {
 	@Override
 	public void run(MoviesCatalogConfig configuration, Environment environment) throws Exception {
 
-		environment.jersey().register(new RentalResource());
+		final RentalsDAO dao = RentalsDAO.getInstance();
+		environment.jersey().register(new RentalResource(dao));
 
-		/*
-		 * Register the custom ExceptionMapper(s)
-		 */
 		environment.jersey().register(new GlobalExceptionMapper());
 		environment.jersey().register(new SystemExceptionMapper());
 		environment.jersey().register(new ApiExceptionMapper());
 
 		environment.healthChecks().register("system", new AppHealthCheck());
+
 	}
 
 	public static void main(String[] args) throws Exception {
