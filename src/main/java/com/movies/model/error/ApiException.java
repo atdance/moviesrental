@@ -13,25 +13,18 @@ public class ApiException extends RuntimeException {
 
 	private static final long serialVersionUID = 7091252269424243077L;
 
-	private final int errorCode;
+	private final int limit;
 	private final String errorMsg;
 
 	public ApiException(Limits code) {
+		super(code.getMsg());
 		errorMsg = code.getMsg();
-		errorCode = code.getCode();
-	}
-
-	public int getErrorCode() {
-		return errorCode;
-	}
-
-	public String getErrorMsg() {
-		return errorMsg;
+		limit = code.getLimit();
 	}
 
 	@Override
 	public String toString() {
-		return "ApiException [errorCode=" + errorCode + ", errorMsg=" + errorMsg + "]";
+		return "ApiException [errorCode=" + limit + ", errorMsg=" + errorMsg + "]";
 	}
 
 }
