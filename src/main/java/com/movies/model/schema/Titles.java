@@ -14,9 +14,9 @@ import java.util.Set;
  * Index of all available movie titles.
  *
  */
-public class Titles {
+class Titles {
 
-	private final String titlesArray[] = { "Rush", "Prisoners", "Thor: The Dark World", "This Is the End",
+	private static final String[] titlesArray = { "Rush", "Prisoners", "Thor: The Dark World", "This Is the End",
 			"Insidious: Chapter 2", "World War Z", "X-Men: Days of Future Past", "Now You See Me", "Gravity", "Riddick",
 			"The Family", "Star Trek Into Darkness", "After Earth", "The Great Gatsby", "Divergent",
 			"We Are What We Are", "Iron Man 3", "The Amazing Spider-Man 2", "The Conjuring", "Escape Plan", "Elysium",
@@ -31,9 +31,25 @@ public class Titles {
 	/**
 	 * Used to retrieve titles by a number index
 	 */
-	ArrayList<String> list = null;
+	List<String> movieTitles = null;
 
-	private volatile static Titles localSession;
+	static private volatile Titles localSession;
+
+	/**
+	 * Uniqueness of titles is enforced with a Set
+	 */
+	private Titles() {
+		uniqueTitles = new HashSet<>();
+		uniqueTitles.addAll(Arrays.asList(titlesArray));
+
+		movieTitles = new ArrayList<>();
+
+		final List<Object> tmpList = Arrays.asList(uniqueTitles.toArray());
+		for (final Object object : tmpList) {
+			movieTitles.add((String) object);
+		}
+
+	}
 
 	/**
 	 * Factory method to get singleton the Titles
@@ -56,27 +72,11 @@ public class Titles {
 		return tempSession;
 	}
 
-	/**
-	 *
-	 */
-	private Titles() {
-		uniqueTitles = new HashSet<>();
-		uniqueTitles.addAll(Arrays.asList(titlesArray));
-
-		list = new ArrayList<String>();
-
-		final List<Object> tmpList = Arrays.asList(uniqueTitles.toArray());
-		for (final Object object : tmpList) {
-			list.add((String) object);
-		}
-
-	}
-
 	public String get(int pID) {
-		return list.get(pID);
+		return movieTitles.get(pID);
 	}
 
 	public List<String> getAll() {
-		return new ArrayList<String>(list);
+		return new ArrayList<>(movieTitles);
 	}
 }

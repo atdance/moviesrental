@@ -12,8 +12,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import com.movies.model.Movie;
 
-public class MovieDatabase {
-	private volatile static MovieDatabase localSession;
+public class MoviesDAO {
+	private static volatile MoviesDAO localSession;
 
 	private List<String> titles = new ArrayList<>();
 	private java.util.concurrent.ThreadLocalRandom random = null;
@@ -21,31 +21,10 @@ public class MovieDatabase {
 	private final Map<String, Movie> index = new HashMap<>();
 
 	/**
-	 * Factory method to get singleton the MovieDatabase
-	 *
-	 * @return MovieDatabase
-	 * @throws IOException
-	 */
-	public static synchronized MovieDatabase getInstance() {
-		MovieDatabase tempSession = localSession;
-
-		if (tempSession == null) {
-			synchronized (MovieDatabase.class) {
-				tempSession = localSession;
-				if (tempSession == null) {
-					tempSession = new MovieDatabase();
-					localSession = tempSession;
-				}
-			}
-		}
-		return tempSession;
-	}
-
-	/**
 	 * Creates Movies and add them to database. All attributes of a movie apart
 	 * the title are randomly chosen.
 	 */
-	private MovieDatabase() {
+	private MoviesDAO() {
 		random = ThreadLocalRandom.current();
 		titles = Titles.getInstance().getAll();
 
@@ -60,13 +39,33 @@ public class MovieDatabase {
 		}
 	}
 
+	/**
+	 * Factory method to get singleton the MovieDatabase
+	 *
+	 * @return MovieDatabase
+	 * @throws IOException
+	 */
+	public static synchronized MoviesDAO getInstance() {
+		MoviesDAO tempSession = localSession;
+
+		if (tempSession == null) {
+			synchronized (MoviesDAO.class) {
+				tempSession = localSession;
+				if (tempSession == null) {
+					tempSession = new MoviesDAO();
+					localSession = tempSession;
+				}
+			}
+		}
+		return tempSession;
+	}
+
 	private <T> T randomValue(T[] values) {
 		return values[random.nextInt(values.length)];
 	}
 
-	public Movie getByTitle(String title) {
-		return index.get(title);
-
+	public Movie get(int pID) {
+		return movies.get(pID);
 	}
 
 	@Override

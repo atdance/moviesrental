@@ -13,27 +13,26 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.movies.model.Limits;
 import com.movies.model.Rental;
-import com.movies.model.error.ApiException;
 
 /**
  * Contains information about the rentals. Thread consistency implemented with a
  * ReentrantReadWriteLock .
  *
  */
-public class RentalsRegister {
+public class RentalsDAO {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RentalsRegister.class);
-	private volatile static RentalsRegister localSession;
+	private static final Logger aLOGGER = LoggerFactory.getLogger(RentalsDAO.class);
+	private static volatile RentalsDAO localSession;
 
 	private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 	private final Lock readLock = rwl.readLock();
 	private final Lock writeLock = rwl.writeLock();
 
-	private final List<Rental> rentals = new ArrayList<Rental>();
+	private List<Rental> rentals = null;
 
-	private RentalsRegister() {
+	private RentalsDAO() {
+		rentals = new ArrayList<>();
 	}
 
 	/**
@@ -42,14 +41,14 @@ public class RentalsRegister {
 	 * @return RentalsRegister
 	 * @throws IOException
 	 */
-	public static synchronized RentalsRegister getInstance() {
-		RentalsRegister tempSession = localSession;
+	public static synchronized RentalsDAO getInstance() {
+		RentalsDAO tempSession = localSession;
 
 		if (tempSession == null) {
-			synchronized (RentalsRegister.class) {
+			synchronized (RentalsDAO.class) {
 				tempSession = localSession;
 				if (tempSession == null) {
-					tempSession = new RentalsRegister();
+					tempSession = new RentalsDAO();
 					localSession = tempSession;
 				}
 			}
@@ -57,56 +56,37 @@ public class RentalsRegister {
 		return tempSession;
 	}
 
-	/*
-	 * public void add(Rental obj) { writeLock.lock(); try { rentals.add(obj);
-	 *
-	 * } catch (final Exception e) { LOGGER.error("Could not add Rental"); }
-	 * finally { writeLock.unlock(); } }
-	 */
-
 	public void addByID(int pID, Rental pRental) {
 		writeLock.lock();
+
 		try {
 			rentals.add(pID, pRental);
 		} catch (final Exception e) {
-			LOGGER.error("Could not add rental by ID " + pID + " " + e.toString());
-		} finally {
-			writeLock.unlock();
-		}
-	}
-
-	public void remove(Rental rental) {
-		writeLock.lock();
-		try {
-			final int id = rental.getId();
-			rentals.set(id, null);
-			// rentals.rentals.remove(obj);
-		} catch (final Exception e) {
-			LOGGER.info("Could not remove Rental");
+			aLOGGER.error("Could not add rental by ID " + pID + " " + e.toString(), e);
 		} finally {
 			writeLock.unlock();
 		}
 	}
 
 	public Rental findByID(int pID) {
-		readLock.lock();
+		writeLock.lock();
 
 		Rental res = null;
+
 		try {
 			for (final Rental rental : rentals) {
 				if (rental.getId() == pID) {
 					res = rental;
+					rentals.set(rental.getId(), null);
 					break;
 				}
-			}
+			} // end if else
+
 		} catch (final Exception e) {
 			res = null;
-			LOGGER.error(e.toString());
+			aLOGGER.error(e.toString() + " " + e.getMessage(), e);
 		} finally {
-			readLock.unlock();
-		}
-		if (res == null) {
-			throw new ApiException(Limits.RENTAL_NOT_FOUND);
+			writeLock.unlock();
 		}
 
 		return res;
@@ -117,13 +97,29 @@ public class RentalsRegister {
 
 		List<Rental> res = null;
 		try {
-			res = rentals;
+			if (rentals != null) {
+				res = new ArrayList<>(100);
+				res.addAll(rentals);
+			}
 		} catch (final Exception e) {
-			LOGGER.info("return EMPTY_LIST");
+			aLOGGER.warn("return EMPTY_LIST", e);
 			res = Collections.emptyList();
 		} finally {
 			readLock.unlock();
 		}
 		return res;
 	}
+
+	public void clear() {
+		writeLock.lock();
+
+		try {
+			rentals.clear();
+		} catch (final Exception e) {
+			aLOGGER.warn(e.toString(), e);
+		} finally {
+			writeLock.unlock();
+		}
+	}
+
 }

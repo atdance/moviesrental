@@ -14,11 +14,11 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.movies.model.IdGenerator;
+import com.movies.api.resource.RentalResource;
+import com.movies.model.Cart;
 import com.movies.model.Movie;
 import com.movies.model.Rental;
-import com.movies.model.schema.MovieDatabase;
-import com.movies.model.schema.Titles;
+import com.movies.model.schema.MoviesDAO;
 
 import io.dropwizard.cli.Command;
 import io.dropwizard.jackson.Jackson;
@@ -43,24 +43,23 @@ public class WorkFlow extends Command {
 		LOGGER.info("Workflow begin");
 		Response response = null;
 		javax.ws.rs.client.Client client = null;
-		int ID = 0;
 
+		final int id = RentalResource.nextID();
 		try {
 			client = ClientBuilder.newClient();
 		} catch (final Exception e) {
-			LOGGER.error(e.toString());
+			LOGGER.error(e.toString(), e);
 		}
 
 		if (null == client) {
-			LOGGER.error("cleint null");
+			LOGGER.error("client null");
 			return;
 		}
 
 		try {
-			final String URL_POST = "http://localhost:8080/rentals/save";
-			ID = IdGenerator.next();
+			final String aURL_POST = "http://localhost:8080/rentals/save";
 
-			final int LEASE_DAYS = 4;
+			final int aLEASE_DAYS = 4;
 
 			ObjectMapper MAPPER = null;
 			MAPPER = Jackson.newObjectMapper();
@@ -70,20 +69,22 @@ public class WorkFlow extends Command {
 			/*
 			 * basket of movies
 			 */
-			basket.add(MovieDatabase.getInstance().getByTitle(Titles.getInstance().get(6)));
-			basket.add(MovieDatabase.getInstance().getByTitle(Titles.getInstance().get(7)));
+			basket.add(MoviesDAO.getInstance().get(6));
+			basket.add(MoviesDAO.getInstance().get(7));
+
+			final Cart cart = new Cart(basket);
 
 			/*
 			 * rental
 			 */
-			final Rental rentalSubmitted = new Rental(ID, LEASE_DAYS, basket);
+			final Rental rentalSubmitted = new Rental(id, aLEASE_DAYS, cart);
 
 			final String rentalString = MAPPER.writeValueAsString(rentalSubmitted);
 
 			final Entity<String> entity = Entity.entity(rentalString, MediaType.APPLICATION_JSON);
-			response = client.target(URL_POST).request(MediaType.APPLICATION_JSON).post(entity);
+			response = client.target(aURL_POST).request(MediaType.APPLICATION_JSON).post(entity);
 		} catch (final Exception e) {
-			LOGGER.error(e.toString());
+			LOGGER.error(e.toString(), e);
 		} finally {
 			if (null != response) {
 				response.close();
@@ -96,15 +97,12 @@ public class WorkFlow extends Command {
 		Response response2 = null;
 
 		try {
-			final WebTarget target = client.target("http://localhost:8080/rentals/return?id=" + ID + "&elapseddays=1");
+			final WebTarget target = client.target("http://localhost:8080/rentals/return?id=" + id + "&elapseddays=1");
 
 			response2 = target.request().accept(MediaType.APPLICATION_JSON).get();
 
-			@SuppressWarnings("unused")
-			final Integer msg2 = response2.readEntity(Integer.class);
-
 		} catch (final Exception e) {
-			LOGGER.error(e.toString());
+			LOGGER.error(e.toString(), e);
 		} finally {
 			LOGGER.info("Workflow end");
 

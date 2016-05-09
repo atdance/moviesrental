@@ -6,7 +6,7 @@ package com.movies.api.resource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -17,81 +17,85 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.movies.model.IdGenerator;
-import com.movies.model.Movie;
+import com.movies.model.Limits;
 import com.movies.model.Rental;
 import com.movies.model.RentalReturn;
-import com.movies.model.schema.MovieDatabase;
-import com.movies.model.schema.RentalsRegister;
-import com.movies.model.schema.Titles;
+import com.movies.model.error.ApiException;
+import com.movies.model.schema.RentalsDAO;
 
 import io.dropwizard.jackson.Jackson;
 
 public class RentalResource implements Resource {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(RentalResource.class);
-	private ObjectMapper MAPPER = null;
+	private static final Logger LOGGER = LoggerFactory.getLogger(RentalResource.class);
+	private ObjectMapper aMAPPER = null;
+	private final RentalsDAO rentalsDAO;
+	private static final AtomicInteger seq = new AtomicInteger();
 
-	public RentalResource() {
-		MAPPER = Jackson.newObjectMapper();
-		MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+	public RentalResource(RentalsDAO dao) {
+		rentalsDAO = dao;
+
+		aMAPPER = Jackson.newObjectMapper();
+		aMAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 
-	static {
-		final int LEASE_DAYS = 4;
-		final int RENTAL_ID = IdGenerator.next();
+	public static int nextID() {
+		return seq.incrementAndGet() - 1;
+	}
 
-		final List<Movie> basket = new ArrayList<Movie>();
-		basket.add(MovieDatabase.getInstance().getByTitle(Titles.getInstance().get(5)));
-		basket.add(MovieDatabase.getInstance().getByTitle(Titles.getInstance().get(3)));
-		RentalsRegister.getInstance().addByID(RENTAL_ID, new Rental(RENTAL_ID, LEASE_DAYS, basket));
+	public static void clearIdGenerator() {
+		seq.set(0);
 	}
 
 	@Override
 	public Response saveRental(String text) {
 		Response res = null;
 		Rental rental = null;
-		int id = -1;
 		try {
-			rental = MAPPER.readValue(text, Rental.class);
+			rental = aMAPPER.readValue(text, Rental.class);
 		} catch (final IOException e) {
-			LOGGER.error(e.toString());
+			LOGGER.error(e.toString() + " " + e.getMessage() + " " + e.getCause(), e);
 		}
 		if (rental == null) {
 			res = Response.status(Status.INTERNAL_SERVER_ERROR).entity("rental is null")
 					.type(MediaType.APPLICATION_JSON).build();
 		} else {
-			id = rental.getId();
-			RentalsRegister.getInstance().addByID(id, rental);
+			final int id = rental.getId();
 
-			res = Response.ok().status(Status.OK).build();
+			rentalsDAO.addByID(id, rental);
+
+			res = Response.ok(Integer.toString(id)).build();
 		}
 		return res;
 	}
 
 	@Override
 	public Response returnRental(final int pID, int pElapsedDays) {
-		Response res = null;
+		Rental rental = null;
+		try {
 
-		final Rental rental = RentalsRegister.getInstance().findByID(pID);
+			rental = rentalsDAO.findByID(pID);
+		} catch (final Exception e) {
+			LOGGER.error(e.toString(), e);
+			throw new ApiException(Limits.RENTAL_NOT_FOUND);
+		}
+
+		if (rental == null) {
+			throw new ApiException(Limits.RENTAL_NOT_FOUND);
+		}
 
 		final RentalReturn ret = new RentalReturn(rental, pElapsedDays);
-		RentalsRegister.getInstance().remove(rental);
-		res = Response.ok(ret.surCharge()).build();
-		return res;
+
+		return Response.ok(ret.surCharge()).build();
 	}
 
 	@Override
 	public Response getRentals() {
-		LOGGER.info("getRentals");
-
 		final Collection<Rental> rentals = new ArrayList<>();
-		for (final Rental rental : RentalsRegister.getInstance().getAll()) {
+		for (final Rental rental : rentalsDAO.getAll()) {
 			rentals.add(rental);
 		}
-		LOGGER.info("Returning [{}] Rentals", rentals.size());
-		final Response res = Response.ok(rentals).build();
-		return res;
+		return Response.ok(rentals).build();
 	}
 
 }
