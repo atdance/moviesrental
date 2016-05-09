@@ -1,4 +1,4 @@
-package com.movies.api.dropwizard;
+package com.movies.simulation;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -8,6 +8,7 @@ import com.movies.api.error.GlobalExceptionMapper;
 import com.movies.api.error.SystemExceptionMapper;
 import com.movies.api.resource.RentalResource;
 import com.movies.model.schema.RentalsDAO;
+import com.movies.simulation.WorkFlow;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;

@@ -75,10 +75,19 @@ known by administrators and has its own mapper.
 properties which are not in admittable ranges and has its own mapper.
 - GlobalException mapper is used on all other cases and returns an internal server error code. 
 
-## How to run
+
+
+
+## How to run if you fork from Github
 Application is in a jar file in the target folder of the attached zipped file. 
 
+- compile with
+<br> mvn package
 - Start the application on the localhost at the port 8080 with:
 <br> java -jar target\movie-0.jar server 
 - Execute an example workload against the application with:
 <br> java -jar target\movie-0.jar workflow
+
+## How to run if you received zip file via email
+Application is in a jar file in the target folder of the attached zipped file. 
+<br> Run all the steps as listed in previous paragraph except the first one .
