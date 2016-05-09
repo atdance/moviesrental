@@ -79,6 +79,6 @@ properties which are not in admittable ranges and has its own mapper.
 Application is in a jar file in the target folder of the attached zipped file. 
 
 - Start the application on the localhost at the port 8080 with:
-.. java -jar target\movie-0.jar server 
+<br> java -jar target\movie-0.jar server 
 - Execute an example workload against the application with:
-.. java -jar target\movie-0.jar workflow
+<br> java -jar target\movie-0.jar workflow
