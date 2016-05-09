@@ -39,10 +39,9 @@ Java JVM 7 and later .
 It runs on its own embedded server with Jetty,no servlet container like Tomcat is needed
 
 ## API overview
-Generate rental – POST /rentals/save 
-Return a rental – GET /rentals/return 
-
-port 8080  
+- Generate rental: POST /rentals/save 
+- Return a rental: GET /rentals/return 
+- port is 8080  
 
 ## Application design
 Dropwizard framework is used and the application is built as an only jar file with an embedded server Jetty.
@@ -69,15 +68,17 @@ the application starts.
 - With the return of a rental this identifier is not removed but is set to unitilizable.
 
 ## Exceptions
-ExceptionMapper is used to handle exceptions • SystemException is used for weird situations that should never happen and that should be 
+- ExceptionMapper is used to handle exceptions
+- SystemException is used for weird situations that should never happen and that should be 
 known by administrators and has its own mapper.
-• ApiException is used for mostly when a rental or a return is submitted and which has 
+- ApiException is used for mostly when a rental or a return is submitted and which has 
 properties which are not in admittable ranges and has its own mapper.
-• GlobalException mapper is used on all other cases and returns an internal server error code. 
+- GlobalException mapper is used on all other cases and returns an internal server error code. 
 
 ## How to run
 Application is in a jar file in the target folder of the attached zipped file. 
-Start the application on the localhost at the port 8080 with:
+
+- Start the application on the localhost at the port 8080 with:
 java -jar target\movie-0.jar server 
-Execute an example workload against the application with:
+- Execute an example workload against the application with:
 java -jar target\movie-0.jar workflow

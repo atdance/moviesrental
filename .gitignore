@@ -34,6 +34,8 @@ hs_err_pid*
 
 # PMD #
 ruleset.xml
+.pmd
+.eclipse-pmd
 
 # SONARQUBE #
 scanner.txt
@@ -43,3 +45,5 @@ sonar-project.properties
 dependency_tree.txt
 README2-md
 gitdaemon.bat
+serverstart.bat
+workflow.bat
