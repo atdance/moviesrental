@@ -52,7 +52,7 @@ The application was built with Eclipse , Maven and Java 7+ with the following co
 mvn package -DskipTests
 Actors and user cases were identified before proceeding to design
 
-
+<br>
 ![Alt text](movie_sequence.png "sequence")
 
 This is a sequence for the two API calls mentioned before.
