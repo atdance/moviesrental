@@ -44,12 +44,18 @@ It runs on its own embedded server with Jetty,no servlet container like Tomcat i
 - port is 8080  
 
 ## Application design
+
+![Alt text](MOVIE_api.jpg "architecture")
+
 Dropwizard framework is used and the application is built as an only jar file with an embedded server Jetty.
 The application was built with Eclipse , Maven and Java 7+ with the following command:
 mvn package -DskipTests
 Actors and user cases were identified before proceeding to design
 
-![Alt text](MOVIE_api.jpg "architecture")
+
+![Alt text](movie_sequence.png "sequence")
+
+This is a sequence for the two API calls mentioned before.
 
 ## Assumptions and limitations
 - The rental basket and the returned basket consist of the same films.
@@ -60,6 +66,8 @@ errors are exposed to users if this values are exceeded.
 error warning is emitted. No other actions like automatic warning to the user or alarm to 
 administrator is previously emitted .
 - Elapsed Days are represented as integers.
+
+
 
 ## Database
 - The database is implemented in Ram memory and is already filled with some movies when
