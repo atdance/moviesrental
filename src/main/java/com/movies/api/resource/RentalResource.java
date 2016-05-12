@@ -71,20 +71,17 @@ public class RentalResource implements Resource {
 
 	@Override
 	public Response returnRental(final int pID, int pElapsedDays) {
-		Rental rental = null;
+		RentalReturn ret = null;
 		try {
 
-			rental = rentalsDAO.findByID(pID);
+			final Rental rental = rentalsDAO.findByID(pID);
+
+			ret = new RentalReturn(rental, pElapsedDays);
+
 		} catch (final Exception e) {
 			LOGGER.error(e.toString(), e);
 			throw new ApiException(Limits.RENTAL_NOT_FOUND);
 		}
-
-		if (rental == null) {
-			throw new ApiException(Limits.RENTAL_NOT_FOUND);
-		}
-
-		final RentalReturn ret = new RentalReturn(rental, pElapsedDays);
 
 		return Response.ok(ret.surCharge()).build();
 	}
