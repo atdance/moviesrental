@@ -13,8 +13,10 @@ public enum Limits {
 
 	MAX_BASKET_SIZE(9, "Too many movies in basket, max " + 9 + " allowed"), BASKET_EMPTY(1, "no movie in basket"),
 
-	EMPTY_TITLE(1, "Movie title cannot be empty"), MAX_DELAY_LENGTH(1000,
-			"Very long delay: not acceptable"), RENTAL_NOT_FOUND(0, "rental not found on requested ID");
+	EMPTY_TITLE(2, "Movie title cannot be empty"), MAX_DELAY_LENGTH(1000,
+			"Very long delay: not acceptable"), RENTAL_NOT_FOUND(0,
+					"rental not found on requested ID"), PRICE_TYPE_NULL(0,
+							"Price Type null"), FILM_TYPE_BONUS_NULL(0, "FILM TYPE and BONUS _NULL");
 
 	private final int limit;
 	private final String msg;

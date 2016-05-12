@@ -23,6 +23,12 @@ public class Movie {
 		if (pTitle == null || pTitle.length() < Limits.EMPTY_TITLE.getLimit()) {
 			throw new ApiException(Limits.EMPTY_TITLE);
 		}
+		if (fType == null) {
+			throw new ApiException(Limits.FILM_TYPE_BONUS_NULL);
+		}
+		if (pType == null) {
+			throw new ApiException(Limits.PRICE_TYPE_NULL);
+		}
 		title = pTitle;
 		movietype = fType;
 		pricetype = pType;
