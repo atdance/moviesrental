@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.movies.model.schema;
+package com.movies.schema;
 
 import java.io.IOException;
 import java.util.ArrayList;
