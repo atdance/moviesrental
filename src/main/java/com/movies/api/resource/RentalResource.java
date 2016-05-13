@@ -17,11 +17,10 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.movies.model.Limits;
 import com.movies.model.Rental;
 import com.movies.model.RentalReturn;
 import com.movies.model.error.ApiException;
-import com.movies.model.schema.RentalsDAO;
+import com.movies.schema.RentalsDAO;
 
 import io.dropwizard.jackson.Jackson;
 
@@ -80,7 +79,7 @@ public class RentalResource implements Resource {
 
 		} catch (final Exception e) {
 			LOGGER.error(e.toString(), e);
-			throw new ApiException(Limits.RENTAL_NOT_FOUND);
+			throw new ApiException("RENTAL_NOT_FOUND");
 		}
 
 		return Response.ok(ret.surCharge()).build();

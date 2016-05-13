@@ -18,7 +18,7 @@ import com.movies.api.resource.RentalResource;
 import com.movies.model.Cart;
 import com.movies.model.Movie;
 import com.movies.model.Rental;
-import com.movies.model.schema.MoviesDAO;
+import com.movies.schema.MoviesDAO;
 
 import io.dropwizard.cli.Command;
 import io.dropwizard.jackson.Jackson;
