@@ -13,7 +13,7 @@ It runs on its own embedded server with Jetty,no servlet container like Tomcat i
 
 ## Application design
 
-![Alt text](res\MOVIE_api.jpg "architecture")
+![Alt text](res/MOVIE_api.jpg "architecture")
 
 Dropwizard framework is used and the application is built as an only jar file with an embedded server Jetty.
 The application was built with Eclipse , Maven and Java 7+ with the following command:
@@ -21,7 +21,7 @@ mvn package -DskipTests
 Actors and user cases were identified before proceeding to design
 
 <br>
-![Alt text](res\movie_sequence.png "sequence")
+![Alt text](res/movie_sequence.png "sequence")
 
 This is a sequence for the two API calls mentioned before.
 
