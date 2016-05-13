@@ -28,7 +28,7 @@ import com.movies.api.resource.RentalResource;
 import com.movies.model.Cart;
 import com.movies.model.Rental;
 import com.movies.model.error.ApiException;
-import com.movies.model.schema.RentalsDAO;
+import com.movies.schema.RentalsDAO;
 
 import io.dropwizard.jackson.Jackson;
 

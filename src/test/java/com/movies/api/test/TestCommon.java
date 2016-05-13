@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.movies.model.Cart;
 import com.movies.model.Movie;
-import com.movies.model.schema.MoviesDAO;
+import com.movies.schema.MoviesDAO;
 
 public class TestCommon {
 	static final int LEASE_DAYS = 4;
