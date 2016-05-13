@@ -3,10 +3,13 @@
  */
 package com.movies.model;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.movies.model.error.ApiException;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.movies.model.error.SystemException;
 
 import lombok.EqualsAndHashCode;
@@ -21,6 +24,8 @@ import lombok.ToString;
 public class RentalReturn {
 
 	private final Rental aRental;
+	@Min(value = 0, message = "The rental period is too short")
+	@Max(value = 1000, message = "The rental period is too long")
 	private final int aElapsedDays;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RentalReturn.class);
@@ -30,18 +35,14 @@ public class RentalReturn {
 	 * @throws SystemException
 	 *
 	 */
+	@JsonCreator
 	public RentalReturn(Rental pRental, int elapsedDays) {
 		if (null == pRental) {
 			throw new SystemException("Arg in constructor is null");
 		}
-		if (elapsedDays < 0) {
-			throw new SystemException("Length of rental cannot be negative.");
-		}
-		if (elapsedDays > Limits.MAX_DELAY_LENGTH.getLimit()) {
-			throw new ApiException(Limits.MAX_DELAY_LENGTH);
-		}
 		aRental = pRental;
 		aElapsedDays = elapsedDays;
+		MyValidator.validate(this);
 	}
 
 	public Integer surCharge() {

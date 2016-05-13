@@ -3,8 +3,6 @@
  */
 package com.movies.model.error;
 
-import com.movies.model.Limits;
-
 /**
  * @author void
  *
@@ -15,9 +13,9 @@ public class ApiException extends RuntimeException {
 
 	private final String errorMsg;
 
-	public ApiException(Limits code) {
-		super(code.getMsg());
-		errorMsg = code.getMsg();
+	public ApiException(String code) {
+		super(code);
+		errorMsg = code;
 	}
 
 	@Override

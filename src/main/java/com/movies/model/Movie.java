@@ -2,9 +2,11 @@ package com.movies.model;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.movies.model.error.ApiException;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -12,28 +14,23 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class Movie {
+
 	private final String title;
+	@NotNull
 	private final TypeAndBonus movietype;
+	@NotNull
 	private final PriceType pricetype;
 
 	@JsonCreator
 	public Movie(@JsonProperty("title") String pTitle, @JsonProperty("movietype") TypeAndBonus fType,
 			@JsonProperty("pricetype") PriceType pType) {
-
-		if (pTitle == null || pTitle.length() < Limits.EMPTY_TITLE.getLimit()) {
-			throw new ApiException(Limits.EMPTY_TITLE);
-		}
-		if (fType == null) {
-			throw new ApiException(Limits.FILM_TYPE_BONUS_NULL);
-		}
-		if (pType == null) {
-			throw new ApiException(Limits.PRICE_TYPE_NULL);
-		}
 		title = pTitle;
 		movietype = fType;
 		pricetype = pType;
+		MyValidator.validate(this);
 	}
 
+	@Size(min = 2, max = 60, message = "The title '${validatedValue}' must be between {min} and {max} characters long")
 	@JsonProperty("title")
 	public String getTitle() {
 		return title;
@@ -64,7 +61,6 @@ public class Movie {
 
 		public final int price;
 
-		// @JsonCreator
 		PriceType(int pPrice) {
 			price = pPrice;
 		}

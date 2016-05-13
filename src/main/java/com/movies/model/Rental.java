@@ -5,9 +5,11 @@ package com.movies.model;
 
 import java.util.List;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.movies.model.error.ApiException;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -29,22 +31,17 @@ public class Rental {
 	@JsonCreator
 	public Rental(@JsonProperty("id") int pID, @JsonProperty("leasedays") int pDays,
 			@JsonProperty("cart") Cart pMovies) {
-		if (pDays < Limits.MIN_RENTAL_DAYS.getLimit()) {
-
-			throw new ApiException(Limits.MIN_RENTAL_DAYS);
-		}
-		if (pDays > Limits.MAX_RENTAL_DAYS.getLimit()) {
-			throw new ApiException(Limits.MAX_RENTAL_DAYS);
-		}
 
 		id = pID;
 		leasedays = pDays;
 		cart = pMovies;
+
 		final List<Movie> moviesList = cart.getMovies();
 		for (final Movie movie : moviesList) {
 			price += movie.getPrice();
 			bonus += movie.getBonus();
 		}
+		MyValidator.validate(this);
 	}
 
 	@JsonProperty("bonus")
@@ -57,6 +54,8 @@ public class Rental {
 		return price;
 	}
 
+	@Min(value = 1, message = "The rental period is too short")
+	@Max(value = 9, message = "The rental period is too long")
 	@JsonProperty("leasedays")
 	public int getLeasedays() {
 		return leasedays;

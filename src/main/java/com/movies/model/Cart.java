@@ -2,16 +2,16 @@ package com.movies.model;
 
 import java.util.List;
 
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.movies.model.error.ApiException;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
-
 public class Cart {
 	private int bonus;
 	private int price;
@@ -19,20 +19,13 @@ public class Cart {
 
 	@JsonCreator
 	public Cart(@JsonProperty("movies") List<Movie> pMovies) {
-
-		if (pMovies == null || pMovies.size() < Limits.BASKET_EMPTY.getLimit()) {
-			throw new ApiException(Limits.BASKET_EMPTY);
-
-		}
-		if (pMovies.size() > Limits.MAX_BASKET_SIZE.getLimit()) {
-			throw new ApiException(Limits.MAX_BASKET_SIZE);
-		}
-
 		movies = pMovies;
+
 		for (final Movie movie : movies) {
 			price += movie.getPrice();
 			bonus += movie.getBonus();
 		}
+		MyValidator.validate(this);
 	}
 
 	@JsonProperty("bonus")
@@ -45,6 +38,7 @@ public class Cart {
 		return price;
 	}
 
+	@Size(min = 1, max = 9, message = "The number of movies in cart '${validatedValue}' must be between {min} and {max}")
 	@JsonProperty("movies")
 	public List<Movie> getMovies() {
 		return movies;
