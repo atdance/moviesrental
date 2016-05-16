@@ -72,9 +72,9 @@ public class RateLimiter implements Filter {
 		before = now;
 
 		if (enabled && (elapsedMillis < TIME_LIMIT_2_5_SECONDS)) {
-			LOGGER.info("FILERED out " + elapsedMillis + " vs " + TIME_LIMIT_2_5_SECONDS);
+			LOGGER.info("FILTERED out " + elapsedMillis + " vs " + TIME_LIMIT_2_5_SECONDS);
 			res.sendError(429);
-			res.addIntHeader("Retry/After", (int) TIME_LIMIT_2_5_SECONDS);
+			res.addIntHeader("Retry/After", (int) (TimeUnit.NANOSECONDS.toSeconds(TIME_LIMIT_2_5_SECONDS)));
 			return;
 		} else {
 			LOGGER.info(" " + elapsedMillis + " vs " + TIME_LIMIT_2_5_SECONDS);
