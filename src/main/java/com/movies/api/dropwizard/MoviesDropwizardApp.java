@@ -49,14 +49,6 @@ public class MoviesDropwizardApp extends Application<MoviesCatalogConfig> {
 		environment.servlets().addFilter("Custom-Filter-Name", limiter)
 				.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
 
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			@Override
-			public void run() {
-				environment.getJerseyServletContainer().destroy();
-				System.out.println("-----------------");
-			}
-		});
-
 	}
 
 	public static void main(String[] args) throws Exception {
