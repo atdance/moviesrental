@@ -14,6 +14,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -33,10 +35,14 @@ import com.movies.schema.RentalsDAO;
 import io.dropwizard.jackson.Jackson;
 
 /**
- * test some operations towards the test API
+ * test some operations towards the test API. This test starts a DropWizard
+ * server instance and closes it. This server does not execute if Dropwizard is
+ * already started
  *
  */
 public class TestClient extends TestCommon {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestClient.class);
 	private static final String HOST = "http://localhost:8080";
 	private static final String URL_BASE = HOST + "/rentals";
 	private static final String URL_POST = HOST + "/rentals/save";
@@ -61,7 +67,11 @@ public class TestClient extends TestCommon {
 		aMAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 		final String[] args = { "server" };
-		new MoviesDropwizardApp().run(args);
+		try {
+			new MoviesDropwizardApp().run(args);
+		} catch (final java.net.BindException e) {
+			LOGGER.error("Test cannot excute as server is already in use");
+		}
 
 	}
 
@@ -72,6 +82,7 @@ public class TestClient extends TestCommon {
 		}
 		RentalsDAO.getInstance().clear();
 		RentalResource.clearIdGenerator();
+		TestClient.destroyJetty();
 	}
 
 	// @Test
@@ -207,4 +218,27 @@ public class TestClient extends TestCommon {
 
 	}
 
+	private static void destroyJetty() {
+		Server jettyServer = null;
+		try {
+			final ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+			context.setContextPath("/");
+
+			jettyServer = new Server(8080);
+			jettyServer.setHandler(context);
+
+		} catch (final Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				if (jettyServer != null) {
+					LOGGER.info("destroy");
+					jettyServer.destroy();
+				}
+			} catch (final Exception e) {
+				LOGGER.error("failed to destroy Jetty server");
+			}
+		}
+	}
 }
