@@ -3,6 +3,10 @@
  */
 package com.movies.api.dropwizard;
 
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
+
 import com.movies.api.error.ApiExceptionMapper;
 import com.movies.api.error.GlobalExceptionMapper;
 import com.movies.api.error.SystemExceptionMapper;
@@ -28,7 +32,7 @@ public class MoviesDropwizardApp extends Application<MoviesCatalogConfig> {
 	 * io.dropwizard.setup.Environment)
 	 */
 	@Override
-	public void run(MoviesCatalogConfig configuration, Environment environment) throws Exception {
+	public void run(MoviesCatalogConfig configuration, final Environment environment) throws Exception {
 
 		final RentalsDAO dao = RentalsDAO.getInstance();
 		environment.jersey().register(new RentalResource(dao));
@@ -38,6 +42,20 @@ public class MoviesDropwizardApp extends Application<MoviesCatalogConfig> {
 		environment.jersey().register(new ApiExceptionMapper());
 
 		environment.healthChecks().register("system", new AppHealthCheck());
+
+		final RateLimiter limiter = new RateLimiter();
+		RateLimiter.enable();
+
+		environment.servlets().addFilter("Custom-Filter-Name", limiter)
+				.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				environment.getJerseyServletContainer().destroy();
+				System.out.println("-----------------");
+			}
+		});
 
 	}
 

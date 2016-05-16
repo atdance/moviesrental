@@ -1,23 +1,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 	<groupId>com.bondsbiz</groupId>
-	<artifactId>movie</artifactId>
+	<artifactId>movie</artifactId>	
+
+<!--
+	<artifactId>parent</artifactId>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>src/main/java</module>
+	</modules>
+-->
+	
 	<version>0</version>
 
 	<build>
-
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-pmd-plugin</artifactId>
-					<version>3.6</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-
-
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -77,32 +75,10 @@
 				</executions>
 			</plugin>
 
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<mainClass>com.bondsbiz.application.MoviesApplication</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
-
 		</plugins>
 	</build>
 
-
 	<dependencies>
-
-		<dependency>
-			<groupId>com.googlecode.junit-toolbox</groupId>
-			<artifactId>junit-toolbox</artifactId>
-			<version>1.10</version>
-		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
@@ -157,9 +133,7 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.13</version>
 		</dependency>
-
-
-
+		
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet-core</artifactId>
@@ -182,6 +156,7 @@
 			<artifactId>jersey-client</artifactId>
 			<version>2.22</version>
 		</dependency>
+
 
 	</dependencies>
 

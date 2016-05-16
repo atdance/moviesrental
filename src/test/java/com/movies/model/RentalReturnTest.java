@@ -1,53 +1,51 @@
-package com.movies.api.test;
+package com.movies.model;
 
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.movies.model.Cart;
 import com.movies.model.Movie;
 import com.movies.model.Rental;
+import com.movies.model.RentalReturn;
 import com.movies.model.error.ApiException;
 
-/**
- * tests the Rental class
- *
- */
-public class RentalTest {
-
-	private final Logger aLOGGER = LoggerFactory.getLogger(RentalTest.class);
+public class RentalReturnTest {
 	private static final int VALID_LEASE_DAYS = 4;
 	private static final int INVALID_LEASE_DAYS = 9000;
 	private static final int INVALID_LEASE_DAYS_MIN = -1;
 
 	@Test
-	public void validRent() {
+	public void validRenturn() {
 
 		final int ID = 0;
 		final Cart cart = buildCart();
-		new Rental(ID, VALID_LEASE_DAYS, cart);
+		final Rental rental = new Rental(ID, VALID_LEASE_DAYS, cart);
+
+		new RentalReturn(rental, 20);
 	}
 
 	@Test(expected = ApiException.class)
-	public void invalidRent() {
-
+	public void invalidReturn() {
 		final int ID = 0;
 		final Cart cart = buildCart();
 		new Rental(ID, INVALID_LEASE_DAYS, cart);
 	}
 
+	/**
+	 * The Return valid but we put an invalid Rental in it.
+	 */
 	@Test(expected = ApiException.class)
 	public void invalidRentLeaseDaysMin() {
 
 		final int ID = 0;
 		final Cart cart = buildCart();
-		new Rental(ID, INVALID_LEASE_DAYS_MIN, cart);
+		final Rental rental = new Rental(ID, INVALID_LEASE_DAYS_MIN, cart);
+		new RentalReturn(rental, 20);
 	}
 
 	/**
-	 * The Cart is valid but we put an invalid Movie in it.
+	 * The Return is valid but we put an invalid Movie in the Rental.
 	 */
 	@Test(expected = ApiException.class)
 	public void validRentButInvalidMovie() {
@@ -58,7 +56,9 @@ public class RentalTest {
 
 		final Cart cart = new Cart(Arrays.asList(movie));
 
-		new Rental(ID, VALID_LEASE_DAYS, cart);
+		final Rental rental = new Rental(ID, VALID_LEASE_DAYS, cart);
+
+		new RentalReturn(rental, 20);
 	}
 
 	protected static Cart buildCart() {

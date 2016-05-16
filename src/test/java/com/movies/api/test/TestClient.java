@@ -77,13 +77,9 @@ public class TestClient extends TestCommon {
 	// @Test
 	public void testRent() throws Exception {
 
-		Response response = null;
-
+		// load some data first
 		final int ID = RentalResource.nextID();
-
-		response = createRental(ID, VALID_LEASE_DAYS);
-
-		assertEquals(200, response.getStatus());
+		postRental(ID, VALID_LEASE_DAYS);
 
 		/*
 		 * continue with a Return
@@ -152,16 +148,12 @@ public class TestClient extends TestCommon {
 
 	// @Test
 	public void testListRentals() {
-		Response response = null;
 
 		// load some data first
-		final int iD = RentalResource.nextID();
+		final int ID = RentalResource.nextID();
+		postRental(ID, VALID_LEASE_DAYS);
 
-		response = createRental(iD, VALID_LEASE_DAYS);
-
-		assertEquals(200, response.getStatus());
-
-		response = null;
+		Response response = null;
 
 		try {
 			final WebTarget target = client.target(URL_BASE).path("/listrentals");
@@ -189,7 +181,7 @@ public class TestClient extends TestCommon {
 		}
 	}
 
-	private Response createRental(int pID, int pDays) {
+	private Response postRental(int pID, int pDays) {
 		Response response = null;
 
 		try {
@@ -199,7 +191,10 @@ public class TestClient extends TestCommon {
 			final String rentalString = aMAPPER.writeValueAsString(rentalSubmitted);
 
 			final Entity<String> entity = Entity.entity(rentalString, MediaType.APPLICATION_JSON);
+
 			response = client.target(URL_POST).request(MediaType.APPLICATION_JSON).post(entity);
+
+			assertEquals(200, response.getStatus());
 		} catch (final Exception e) {
 			aLOGGER.error(e.toString() + " " + e.getMessage() + " " + e.getCause(), e);
 

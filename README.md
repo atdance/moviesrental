@@ -51,7 +51,11 @@ known by administrators and has its own mapper.
 properties which are not in admittable ranges and has its own mapper.
 - GlobalException mapper is used on all other cases and returns an internal server error code. 
 
-
+## SECURITY
+- The API is rate limited.
+- Input data is validated.
+- Logged input validation failures.
+- Strong typing: incoming data is strogly typed as quickly as possible.
 
 
 ## How to run if you fork from Github

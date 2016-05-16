@@ -1,4 +1,4 @@
-package com.movies.api.test;
+package com.movies.model;
 
 import java.util.Arrays;
 
@@ -7,45 +7,44 @@ import org.junit.Test;
 import com.movies.model.Cart;
 import com.movies.model.Movie;
 import com.movies.model.Rental;
-import com.movies.model.RentalReturn;
 import com.movies.model.error.ApiException;
 
-public class RentalReturnTest {
+/**
+ * tests the Rental class
+ *
+ */
+public class RentalTest {
+
 	private static final int VALID_LEASE_DAYS = 4;
 	private static final int INVALID_LEASE_DAYS = 9000;
 	private static final int INVALID_LEASE_DAYS_MIN = -1;
 
 	@Test
-	public void validRenturn() {
+	public void validRent() {
 
 		final int ID = 0;
 		final Cart cart = buildCart();
-		final Rental rental = new Rental(ID, VALID_LEASE_DAYS, cart);
-
-		new RentalReturn(rental, 20);
+		new Rental(ID, VALID_LEASE_DAYS, cart);
 	}
 
 	@Test(expected = ApiException.class)
-	public void invalidReturn() {
+	public void invalidRent() {
+
 		final int ID = 0;
 		final Cart cart = buildCart();
 		new Rental(ID, INVALID_LEASE_DAYS, cart);
 	}
 
-	/**
-	 * The Return valid but we put an invalid Rental in it.
-	 */
 	@Test(expected = ApiException.class)
 	public void invalidRentLeaseDaysMin() {
 
 		final int ID = 0;
 		final Cart cart = buildCart();
-		final Rental rental = new Rental(ID, INVALID_LEASE_DAYS_MIN, cart);
-		new RentalReturn(rental, 20);
+		new Rental(ID, INVALID_LEASE_DAYS_MIN, cart);
 	}
 
 	/**
-	 * The Return is valid but we put an invalid Movie in the Rental.
+	 * The Cart is valid but we put an invalid Movie in it.
 	 */
 	@Test(expected = ApiException.class)
 	public void validRentButInvalidMovie() {
@@ -56,9 +55,7 @@ public class RentalReturnTest {
 
 		final Cart cart = new Cart(Arrays.asList(movie));
 
-		final Rental rental = new Rental(ID, VALID_LEASE_DAYS, cart);
-
-		new RentalReturn(rental, 20);
+		new Rental(ID, VALID_LEASE_DAYS, cart);
 	}
 
 	protected static Cart buildCart() {

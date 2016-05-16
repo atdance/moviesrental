@@ -1,4 +1,4 @@
-package com.movies.api.test;
+package com.movies.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;

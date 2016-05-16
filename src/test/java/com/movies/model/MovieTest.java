@@ -1,4 +1,4 @@
-package com.movies.api.test;
+package com.movies.model;
 
 import org.junit.Test;
 
