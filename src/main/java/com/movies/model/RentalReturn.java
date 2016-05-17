@@ -23,42 +23,42 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class RentalReturn {
 
-	private final Rental aRental;
+	private final Cart aCart;
 	@Min(value = 0, message = "The rental period is too short")
 	@Max(value = 1000, message = "The rental period is too long")
 	private final int aElapsedDays;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RentalReturn.class);
 	private static final Integer ZERO = new Integer(0);
+	private final int aleaseDays;
 
 	/**
 	 * @throws SystemException
 	 *
 	 */
 	@JsonCreator
-	public RentalReturn(Rental pRental, int elapsedDays) {
-		if (null == pRental) {
+	public RentalReturn(int leaseDays, Cart pCart, int elapsedDays) {
+		aleaseDays = leaseDays;
+		if (null == pCart) {
 			throw new SystemException("Arg in constructor is null");
 		}
-		aRental = pRental;
+		aCart = pCart;
 		aElapsedDays = elapsedDays;
 		MyValidator.validate(this);
 	}
 
 	public Integer surCharge() {
 		int charge = 0;
-		if (aElapsedDays > 0 && aElapsedDays <= aRental.getLeasedays()) {
+		if (aElapsedDays > 0 && aElapsedDays <= aleaseDays) {
 			LOGGER.info("Movies returned before the booked end of rental");
 			return ZERO;
 		}
 
-		final int leaseDays = aRental.getLeasedays();
+		final int leaseDays = aleaseDays;
 		final int delay = aElapsedDays - leaseDays;
 		if (delay > 0) {
 
-			final Cart cart = aRental.getCart();
-
-			for (final Movie movie : cart.getMovies()) {
+			for (final Movie movie : aCart.getMovies()) {
 				final int price = movie.getPrice();
 				charge += (price * delay);
 			}

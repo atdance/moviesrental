@@ -4,10 +4,6 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import com.movies.model.Cart;
-import com.movies.model.Movie;
-import com.movies.model.Rental;
-import com.movies.model.RentalReturn;
 import com.movies.model.error.ApiException;
 
 public class RentalReturnTest {
@@ -19,16 +15,21 @@ public class RentalReturnTest {
 	public void validRenturn() {
 
 		final int ID = 0;
+
 		final Cart cart = buildCart();
+
 		final Rental rental = new Rental(ID, VALID_LEASE_DAYS, cart);
 
-		new RentalReturn(rental, 20);
+		new RentalReturn(rental.getLeasedays(), rental.getCart(), 20);
 	}
 
 	@Test(expected = ApiException.class)
 	public void invalidReturn() {
+
 		final int ID = 0;
+
 		final Cart cart = buildCart();
+
 		new Rental(ID, INVALID_LEASE_DAYS, cart);
 	}
 
@@ -39,9 +40,12 @@ public class RentalReturnTest {
 	public void invalidRentLeaseDaysMin() {
 
 		final int ID = 0;
+
 		final Cart cart = buildCart();
+
 		final Rental rental = new Rental(ID, INVALID_LEASE_DAYS_MIN, cart);
-		new RentalReturn(rental, 20);
+
+		new RentalReturn(rental.getLeasedays(), rental.getCart(), 20);
 	}
 
 	/**
@@ -58,13 +62,15 @@ public class RentalReturnTest {
 
 		final Rental rental = new Rental(ID, VALID_LEASE_DAYS, cart);
 
-		new RentalReturn(rental, 20);
+		new RentalReturn(rental.getLeasedays(), rental.getCart(), 20);
 	}
 
 	protected static Cart buildCart() {
+
 		final Movie movie = new Movie("aaa", Movie.TypeAndBonus.NEW, Movie.PriceType.BASIC);
 
 		final Cart cart = new Cart(Arrays.asList(movie));
+
 		return cart;
 	}
 
