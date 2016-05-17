@@ -21,7 +21,7 @@ mvn package -DskipTests
 Actors and user cases were identified before proceeding to design
 
 <br>
-![Alt text](res/movie_sequence.png "sequence")
+![Alt text](res/movie_sequence3.jpg "sequence")
 
 This is a sequence for the two API calls mentioned before.
 
