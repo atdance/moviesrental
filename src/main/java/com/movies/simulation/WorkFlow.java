@@ -62,8 +62,7 @@ public class WorkFlow extends Command {
 			final int aLEASE_DAYS = 4;
 
 			ObjectMapper MAPPER = null;
-			MAPPER = Jackson.newObjectMapper();
-			MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			MAPPER = Jackson.newObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 			final List<Movie> basket = new ArrayList<>();
 			/*
