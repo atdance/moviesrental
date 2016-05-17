@@ -11,6 +11,7 @@ import com.movies.api.error.ApiExceptionMapper;
 import com.movies.api.error.GlobalExceptionMapper;
 import com.movies.api.error.SystemExceptionMapper;
 import com.movies.api.resource.RentalResource;
+import com.movies.controller.Controller;
 import com.movies.schema.RentalsDAO;
 import com.movies.simulation.WorkFlow;
 
@@ -35,7 +36,8 @@ public class MoviesDropwizardApp extends Application<MoviesCatalogConfig> {
 	public void run(MoviesCatalogConfig configuration, final Environment environment) throws Exception {
 
 		final RentalsDAO dao = RentalsDAO.getInstance();
-		environment.jersey().register(new RentalResource(dao));
+		final Controller controller = new Controller(dao);
+		environment.jersey().register(new RentalResource(controller));
 
 		environment.jersey().register(new GlobalExceptionMapper());
 		environment.jersey().register(new SystemExceptionMapper());
