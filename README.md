@@ -35,8 +35,6 @@ error warning is emitted. No other actions like automatic warning to the user or
 administrator is previously emitted .
 - Elapsed Days are represented as integers.
 
-
-
 ## Database
 - The database is implemented in Ram memory and is already filled with some movies when
 the application starts.
@@ -57,10 +55,7 @@ properties which are not in admittable ranges and has its own mapper.
 - Logged input validation failures.
 - Strong typing: incoming data is strogly typed as quickly as possible.
 
-
 ## How to run if you fork from Github
-Application is in a jar file in the target folder of the attached zipped file. 
-
 - compile with
 <br> mvn package
 - Start the application on the localhost at the port 8080 with:
