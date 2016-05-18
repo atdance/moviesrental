@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.movies.api.test;
+package com.movies.api;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
