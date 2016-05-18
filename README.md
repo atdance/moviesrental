@@ -35,6 +35,8 @@ error warning is emitted. No other actions like automatic warning to the user or
 administrator is previously emitted .
 - Elapsed Days are represented as integers.
 
+
+
 ## Database
 - The database is implemented in Ram memory and is already filled with some movies when
 the application starts.
@@ -55,13 +57,18 @@ properties which are not in admittable ranges and has its own mapper.
 - Logged input validation failures.
 - Strong typing: incoming data is strogly typed as quickly as possible.
 
+
 ## How to run if you fork from Github
-- compile with
+The  api module is configured to create a single JAR containing the bytecode of the project
+ and all of the bytecode from the dependencies.
+- To create this assembly, run the package goal of the Maven Shade plugin from the api module directory:
+<br> cd api
 <br> mvn package
-- Start the application on the localhost at the port 8080 with:
-<br> java -jar target\movie-0.jar server 
-- Execute an example workload against the application with:
-<br> java -jar target\movie-0.jar workflow
+ 
+- Start the application the localhost/port 8080 from api directory on  with:
+<br> java -jar target\api-1.0-SNAPSHOT.jar server 
+- Execute the simulated workload against the application with:
+<br> java -jar target\api-1.0-SNAPSHOT.jar workflow
 
 ## How to run if you received zip file via email
 Application is in a jar file in the target folder of the attached zipped file. 
