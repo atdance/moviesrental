@@ -4,12 +4,30 @@
 
 ## Installation requirements
 Java JVM 7 and later .
-It runs on its own embedded server with Jetty,no servlet container like Tomcat is needed
+It runs on its own embedded server with Jetty, no servlet container like Tomcat is needed
 
 ## API overview
 - Generate rental: POST /rentals/save 
 - Return a rental: GET /rentals/return 
 - port is 8080  
+
+## Project structure
+
+It is implemented as a multi-module maven project.
+
+## Frameworks used
+- Dropwizard framework
+- Shade maven plugin
+- embedded server Jetty.
+- Slf4j
+- JEE Servlet filters
+- Java SE 8
+- JSR 349 with JBoss Hybernate validator
+- Lombok
+- Jackson for XML 
+- Maven & Git
+- Junit
+- SonarQube and PMD
 
 ## Application design
 
