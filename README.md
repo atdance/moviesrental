@@ -18,11 +18,10 @@ It is implemented as a multi-module maven project.
 ## Frameworks used
 - Dropwizard framework
 - Shade maven plugin
-- embedded server Jetty.
+- Jetty embedded server 
 - Slf4j
-- JEE Servlet filters
+- Java EE: JAX-RS, JSR 349 with JBoss Hybernate validator, Servlet filters
 - Java SE 8
-- JSR 349 with JBoss Hybernate validator
 - Lombok
 - Jackson for XML 
 - Maven & Git
