@@ -62,6 +62,7 @@ public class RateLimiter implements Filter {
 		final HttpServletRequest req = (HttpServletRequest) request;
 
 		if (req.getMethod().equalsIgnoreCase("GET")) {
+			chain.doFilter(request, response);
 			return;
 		}
 
@@ -73,9 +74,10 @@ public class RateLimiter implements Filter {
 
 		if (enabled && (elapsedMillis < TIME_LIMIT_2_5_SECONDS)) {
 			LOGGER.info("FILTERED out " + elapsedMillis + " vs " + TIME_LIMIT_2_5_SECONDS);
-			res.sendError(429);
-			res.addIntHeader("Retry/After", (int) (TimeUnit.NANOSECONDS.toSeconds(TIME_LIMIT_2_5_SECONDS)));
-			return;
+			// res.sendError(429);
+			// res.addIntHeader("Retry/After", (int)
+			// (TimeUnit.NANOSECONDS.toSeconds(TIME_LIMIT_2_5_SECONDS)));
+			// return;
 		} else {
 			LOGGER.info(" " + elapsedMillis + " vs " + TIME_LIMIT_2_5_SECONDS);
 		}
