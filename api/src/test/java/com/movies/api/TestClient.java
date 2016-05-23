@@ -199,6 +199,8 @@ public class TestClient extends TestCommon {
 	private Response postRental(int pID, int pDays) {
 		Response response = null;
 
+		RateLimiter.disable();
+
 		try {
 			final Cart cart = buildCart();
 			rentalSubmitted = new Rental(pID, pDays, cart);
