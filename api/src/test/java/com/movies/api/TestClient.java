@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movies.api.dropwizard.MoviesDropwizardApp;
+import com.movies.api.dropwizard.RateLimiter;
 import com.movies.api.resource.RentalResource;
 import com.movies.model.Cart;
 import com.movies.model.Rental;
@@ -66,6 +67,8 @@ public class TestClient extends TestCommon {
 		aMAPPER = Jackson.newObjectMapper();
 		aMAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
+		RateLimiter.disable();
+
 		final String[] args = { "server" };
 		try {
 			new MoviesDropwizardApp().run(args);
@@ -85,7 +88,7 @@ public class TestClient extends TestCommon {
 		TestClient.destroyJetty();
 	}
 
-	// @Test
+	@Test
 	public void testRent() throws Exception {
 
 		// load some data first
@@ -108,6 +111,7 @@ public class TestClient extends TestCommon {
 
 			try {
 				msg2 = response2.readEntity(Integer.class);
+
 			} catch (final Exception e) {
 				aLOGGER.info(e.getCause() + "" + e.getMessage(), e);
 				exc2 = e;
@@ -136,7 +140,7 @@ public class TestClient extends TestCommon {
 		new Rental(ID, INVALID_LEASE_DAYS, cart);
 	}
 
-	// @Test
+	@Test
 	public void testReturnRentalNotExisting() {
 		Response response = null;
 		try {
@@ -157,7 +161,7 @@ public class TestClient extends TestCommon {
 		assertTrue(response.getStatus() != Response.Status.OK.getStatusCode());
 	}
 
-	// @Test
+	@Test
 	public void testListRentals() {
 
 		// load some data first
