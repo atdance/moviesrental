@@ -37,8 +37,7 @@ The application was built with Eclipse , Maven and Java 7+ with the following co
 mvn package -DskipTests
 Actors and user cases were identified before proceeding to design
 
-<br>
-![Alt text](res/movie_sequence3.jpg "sequence")
+![alt text](https://github.com/atdance/moviesrental/blob/master/res/movie_sequence3.jpg?raw=true)
 
 This is a sequence for the two API calls mentioned before.
 
