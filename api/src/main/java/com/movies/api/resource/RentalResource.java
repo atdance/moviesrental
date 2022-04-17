@@ -67,7 +67,6 @@ public class RentalResource implements Resource {
 			surcharge = controller.returnRental(pID, pElapsedDays);
 
 		} catch (final Exception e) {
-			LOGGER.error(e.toString(), e);
 			throw new ApiException("RENTAL_NOT_FOUND");
 		}
 

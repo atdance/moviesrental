@@ -28,7 +28,7 @@ It is implemented as a multi-module maven project.
 
 ## Application design
 
-![Alt text](res/MOVIE_API.jpg "architecture")
+![Alt text](https://github.com/atdance/moviesrental/blob/master/res/MOVIE_API.jpg?raw=true)
 
 Dropwizard framework is used and the application is built as an only jar file with an embedded server Jetty.
 The application was built with Eclipse , Maven and Java 7+ with the following command:

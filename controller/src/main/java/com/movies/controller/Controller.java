@@ -69,7 +69,6 @@ public class Controller {
 			ret = new RentalReturn(rental.getLeasedays(), rental.getCart(), pElapsedDays);
 
 		} catch (final Exception e) {
-			LOGGER.error(e.toString(), e);
 			throw new ApiException("RENTAL_NOT_FOUND");
 		}
 

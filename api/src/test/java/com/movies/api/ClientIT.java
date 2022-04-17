@@ -41,16 +41,16 @@ import io.dropwizard.jackson.Jackson;
  * already started
  *
  */
-public class TestClient extends TestCommon {
+public class ClientIT extends TestCommon {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(TestClient.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClientIT.class);
 	private static final String HOST = "http://localhost:8080";
 	private static final String URL_BASE = HOST + "/rentals";
 	private static final String URL_POST = HOST + "/rentals/save";
 
 	private static javax.ws.rs.client.Client client = null;
 
-	private final Logger aLOGGER = LoggerFactory.getLogger(TestClient.class);
+
 	private static final int VALID_LEASE_DAYS = 4;
 	private static final int INVALID_LEASE_DAYS = 9000;
 
@@ -85,7 +85,7 @@ public class TestClient extends TestCommon {
 		}
 		RentalsDAO.getInstance().clear();
 		RentalResource.clearIdGenerator();
-		TestClient.destroyJetty();
+		ClientIT.destroyJetty();
 	}
 
 	@Test
@@ -113,12 +113,12 @@ public class TestClient extends TestCommon {
 				msg2 = response2.readEntity(Integer.class);
 
 			} catch (final Exception e) {
-				aLOGGER.info(e.getCause() + "" + e.getMessage(), e);
+				LOGGER.info(e.getCause() + "" + e.getMessage(), e);
 				exc2 = e;
 			}
 
 		} catch (final Exception e) {
-			aLOGGER.error(e.toString() + " " + e.getMessage() + " " + e.getCause(), e);
+			LOGGER.error(e.toString() + " " + e.getMessage() + " " + e.getCause(), e);
 
 		} finally {
 			if (null != response2) {
@@ -148,8 +148,7 @@ public class TestClient extends TestCommon {
 			response = target.request().accept(MediaType.APPLICATION_JSON).get();
 
 		} catch (final Exception e) {
-			aLOGGER.error(e.toString() + " " + e.getMessage() + " " + e.getCause(), e);
-
+			LOGGER.error(e.toString() + " " + e.getMessage());
 		} finally {
 			if (null != response) {
 				response.close();
@@ -187,7 +186,7 @@ public class TestClient extends TestCommon {
 			Assert.assertEquals(iterations, successfulIterations);
 
 		} catch (final Exception e) {
-			aLOGGER.error(e.toString() + " " + e.getMessage() + " " + e.getCause(), e);
+			LOGGER.error(e.toString() + " " + e.getMessage() + " " + e.getCause(), e);
 
 		} finally {
 			if (null != response) {
@@ -213,7 +212,7 @@ public class TestClient extends TestCommon {
 
 			assertEquals(200, response.getStatus());
 		} catch (final Exception e) {
-			aLOGGER.error(e.toString() + " " + e.getMessage() + " " + e.getCause(), e);
+			LOGGER.error(e.toString() + " " + e.getMessage() + " " + e.getCause(), e);
 
 		} finally {
 			if (null != response) {

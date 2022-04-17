@@ -13,6 +13,18 @@
   <name>api</name>
   <url>http://maven.apache.org</url>
   
+   <dependencyManagement> 
+     <dependencies> 
+         <dependency> 
+             <groupId>io.dropwizard</groupId> 
+             <artifactId>dropwizard-bom</artifactId> 
+             <version>${dropwizard.version}</version> 
+             <type>pom</type> 
+             <scope>import</scope> 
+         </dependency> 
+     </dependencies> 
+ </dependencyManagement>
+  
   	<build>
 		<plugins>
 			<plugin>
@@ -20,16 +32,6 @@
 				<artifactId>maven-pmd-plugin</artifactId>
 				<version>3.6</version>
 			</plugin>
-
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.3</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
-
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -73,8 +75,6 @@
 		</plugins>
 	</build>
   
-  
-  
   <dependencies>
    <dependency>
 		<groupId>com.movies</groupId>
@@ -103,6 +103,25 @@
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>  
+		</dependency>
+		<!-- API, java.xml.bind module -->
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+			<version>2.3.2</version>
+		</dependency>
+
+		<!-- Runtime, com.sun.xml.bind module -->
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>2.3.2</version>
+		</dependency>
+				
   </dependencies>
+  
+	<properties>
+  		<dropwizard.version>2.0.11</dropwizard.version>
+	</properties>
+  
 </project>

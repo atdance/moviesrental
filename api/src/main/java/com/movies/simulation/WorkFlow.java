@@ -8,6 +8,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ProcessingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,10 +42,9 @@ public class WorkFlow extends Command {
 	@Override
 	public void run(Bootstrap<?> bootstrap, Namespace namespace) throws Exception {
 		LOGGER.info("Workflow begin");
-		Response response = null;
+
 		javax.ws.rs.client.Client client = null;
 
-		final int id = RentalResource.nextID();
 		try {
 			client = ClientBuilder.newClient();
 		} catch (final Exception e) {
@@ -55,6 +55,12 @@ public class WorkFlow extends Command {
 			LOGGER.error("client null");
 			return;
 		}
+		
+		final int id = RentalResource.nextID();
+
+		System.out.println("\n\n\n Submitting Rental request with ID " + id );
+
+		Response response = null;
 
 		try {
 			final String aURL_POST = "http://localhost:8080/rentals/save";
@@ -72,6 +78,9 @@ public class WorkFlow extends Command {
 			basket.add(MoviesDAO.getInstance().get(7));
 
 			final Cart cart = new Cart(basket);
+			
+			System.out.println("\n " + basket );
+
 
 			/*
 			 * rental
@@ -82,6 +91,13 @@ public class WorkFlow extends Command {
 
 			final Entity<String> entity = Entity.entity(rentalString, MediaType.APPLICATION_JSON);
 			response = client.target(aURL_POST).request(MediaType.APPLICATION_JSON).post(entity);
+			
+			System.out.println("\n Response status "+ response.getStatus());
+			System.out.println("Rental successfully accepted with ID " + response.readEntity(Integer.class) );
+			System.out.println("" );
+			
+		}catch (final ProcessingException e) {
+			System.out.println(" ! Did you start the server? [" + e.getMessage() +"]");
 		} catch (final Exception e) {
 			LOGGER.error(e.toString(), e);
 		} finally {
@@ -93,14 +109,24 @@ public class WorkFlow extends Command {
 		/*
 		 * continue with a Return
 		 */
+		System.out.println("\n\n\nReturning movies. Rental has ID " +id);
+		System.out.println("" );
+		
+		
 		Response response2 = null;
 
 		try {
 			final WebTarget target = client.target("http://localhost:8080/rentals/return?id=" + id + "&elapseddays=1");
 
 			response2 = target.request().accept(MediaType.APPLICATION_JSON).get();
+			
+			System.out.println("Response status "+ response2.getStatus());
+			System.out.println("Rental return successfully submitted.  Rental had ID " +	response2.readEntity(Integer.class) );
+			System.out.println("" );
 
-		} catch (final Exception e) {
+		}catch (final ProcessingException e) {
+			System.out.println(" ! Did you start the server? [" + e.getMessage() +"]");
+		}catch (final Exception e) {
 			LOGGER.error(e.toString(), e);
 		} finally {
 			LOGGER.info("Workflow end");
@@ -109,6 +135,7 @@ public class WorkFlow extends Command {
 				response2.close();
 			}
 		}
+		
 
 	}
 }
