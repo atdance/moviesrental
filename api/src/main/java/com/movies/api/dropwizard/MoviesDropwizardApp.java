@@ -26,12 +26,10 @@ public class MoviesDropwizardApp extends Application<MoviesCatalogConfig> {
 		bootstrap.addCommand(new WorkFlow());
 	}
 
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 *
 	 * @see io.dropwizard.Application#run(io.dropwizard.Configuration,
-	 * io.dropwizard.setup.Environment)
-	 */
+	 * io.dropwizard.setup.Environment) */
 	@Override
 	public void run(MoviesCatalogConfig configuration, final Environment environment) throws Exception {
 
