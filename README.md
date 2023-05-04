@@ -1,7 +1,7 @@
 # Video rental store
 
 ## Installation requirements
-Java JVM 7 and later .
+Java JVM 7 and later.
 It runs on its own embedded server with Jetty, no servlet container like Tomcat is needed
 
 ## API overview
@@ -30,18 +30,18 @@ It is implemented as a multi-module maven project.
 
 ![Alt text](https://raw.githubusercontent.com/atdance/moviesrental/master/res/MOVIE_api.jpg)
 
-Dropwizard framework is used and the application is built as an only jar file with an embedded server Jetty.
-The application was built with Eclipse , Maven and Java 7+ with the following command:
+Dropwizard framework is used and the application is contained within a jar file with an embedded server Jetty.
+The application was built with Maven and Java 7+ with the following command:
 mvn package -DskipTests
 Actors and user cases were identified before proceeding to design
 <br/>
 <br/>
 
-![alt text](https://github.com/atdance/moviesrental/blob/master/res/movie_sequence3.jpg?raw=true)
-
 This is a sequence diagram for the two API calls:
 - Generate rental: POST /rentals/save 
 - Return a rental: GET /rentals/return 
+
+![alt text](https://github.com/atdance/moviesrental/blob/master/res/movie_sequence3.jpg?raw=true)
 
 ## Assumptions and limitations
 - The rental basket and the returned basket consist of the same films.
@@ -51,7 +51,7 @@ This is a sequence diagram for the two API calls:
 - Errors are exposed to users if this values are exceeded.
 - The maximum length of a rental is 1000 days. In the case the user presents a such return an 
 error warning is emitted. No other actions like automatic warning to the user or alarm to 
-administrator is previously emitted .
+administrator is previously emitted.
 - Elapsed Days are represented as integers.
 
 ## Database
@@ -71,22 +71,22 @@ known by administrators and has its own mapper.
 - The API is rate limited.
 - Input data is validated.
 - Logged input validation failures.
-- Strong typing: incoming data is strogly typed as quickly as possible.
+- Strong typing: incoming data is strongly typed as quickly as possible.
 
 ## How to run
 
 ### If you fork from Github
-The  API module is configured to create a single JAR containing the byte-code of the project
+The API module is configured to create a single JAR containing the byte-code of the project
  and all of the byte-code from the dependencies.
 - To create this assembly, run the package goal of the Maven Shade plugin from the API module directory:
 <br> cd api
 <br> mvn package
  
-- Start the application the localhost/port 8080 from API directory on  with:
+- Start the application the localhost/port 8080 from API directory with:
 <br> java -jar target\API-1.0-SNAPSHOT.jar server 
-- Execute the simulated workload against the application with:
+- Execute the simulated workload against the application from API directory with:
 <br> java -jar target\API-1.0-SNAPSHOT.jar workflow
 
 ### From zip file
 Application is in a jar file in the target folder of the attached zipped file. 
-<br> Run all the steps as listed in previous paragraph except the first one .
+<br> Run all the steps as listed in previous paragraph except the first one
